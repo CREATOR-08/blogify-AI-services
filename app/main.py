@@ -24,5 +24,7 @@ app.add_middleware(
 async def handle_generate_tags(request: BlogRequest):
     return await generate_tags(request)
 
-
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
 app.include_router(router)
