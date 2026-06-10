@@ -5,6 +5,9 @@ from app.services.ingestion import ingest_articles
 from app.schemas.query import QueryRequest
 from app.services.retrieval import retrieve_context
 from app.services.rag import answer_question
+from app.services.topic_curator import curate_topics
+from app.schemas.news import CountryRequest
+from app.services.newsfetcher import newsfetcher as fetch_country_news
 router = APIRouter(
     prefix="/current-affairs",
     tags=["Current Affairs"]
@@ -50,3 +53,18 @@ def ask_question(data: QueryRequest):
     return answer_question(
         data.question
     )
+
+
+
+@router.post("/trending")
+def trending_news(data: CountryRequest):
+
+    articles = fetch_country_news(
+        data.country
+    )
+
+    curated_topics = curate_topics(
+        articles
+    )
+
+    return curated_topics

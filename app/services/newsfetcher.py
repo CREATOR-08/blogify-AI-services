@@ -6,16 +6,16 @@ load_dotenv()
 
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 
-def newsfetcher():
+def newsfetcher(country):
 
 
     url = (
-    f"https://newsapi.org/v2/everything"
-    f"?q=(India OR Pakistan OR China OR USA OR Technology OR AI OR Economy OR Politics)"
-    f"&sortBy=publishedAt"
-    f"&pageSize=10"
-    f"&apiKey={NEWS_API_KEY}"
-)
+        f"https://newsapi.org/v2/everything"
+        f"?q={country}"
+        f"&sortBy=publishedAt"
+        f"&language=en"
+        f"&pageSize=10"
+        f"&apiKey={NEWS_API_KEY}")
 
     response = requests.get(url)
 
