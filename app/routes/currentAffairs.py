@@ -1,13 +1,14 @@
 from fastapi import APIRouter
-from app.services.newsfetcher import newsfetcher
-from app.services.ingestion import ingest_articles
+# from app.services.newsfetcher import newsfetcher
+# from app.services.ingestion import ingest_articles
 
-from app.schemas.query import QueryRequest
-from app.services.retrieval import retrieve_context
-from app.services.rag import answer_question
+# from app.schemas.query import QueryRequest
+# from app.services.retrieval import retrieve_context
+# from app.services.rag import answer_question
 from app.services.topic_curator import curate_topics
 from app.schemas.news import CountryRequest
 from app.services.newsfetcher import newsfetcher as fetch_country_news
+
 router = APIRouter(
     prefix="/current-affairs",
     tags=["Current Affairs"]
@@ -24,35 +25,35 @@ router = APIRouter(
 #         "articles": articles
 #     }
 
-@router.post("/ingest")
-def ingest_news():
+# @router.post("/ingest")
+# def ingest_news():
 
-    articles = newsfetcher()
+#     articles = newsfetcher()
 
-    count = ingest_articles(articles)
+#     count = ingest_articles(articles)
 
-    return {
-        "chunks_stored": count
-    }
+#     return {
+#         "chunks_stored": count
+#     }
 
-@router.post("/search")
-def search_news(data: QueryRequest):
+# @router.post("/search")
+# def search_news(data: QueryRequest):
 
-    documents = retrieve_context(
-        data.question
-    )
+#     documents = retrieve_context(
+#         data.question
+#     )
 
-    return {
-        "question": data.question,
-        "context": documents
-    }
+#     return {
+#         "question": data.question,
+#         "context": documents
+#     }
 
-@router.post("/ask")
-def ask_question(data: QueryRequest):
+# @router.post("/ask")
+# def ask_question(data: QueryRequest):
 
-    return answer_question(
-        data.question
-    )
+#     return answer_question(
+#         data.question
+#     )
 
 
 
