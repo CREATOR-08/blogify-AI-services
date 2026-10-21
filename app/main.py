@@ -5,7 +5,7 @@ from app.routes import currentAffairs
 from app.schemas.tagschema import BlogRequest
 
 from app.routes.tagging import generate_tags
-from app.routes.currentAffairs import router
+from app.routes.currentAffairs import api_router, router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -29,3 +29,4 @@ async def handle_generate_tags(request: BlogRequest):
 def health():
     return {"status": "healthy"}
 app.include_router(router)
+app.include_router(api_router)

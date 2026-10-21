@@ -13,6 +13,7 @@ router = APIRouter(
     prefix="/current-affairs",
     tags=["Current Affairs"]
 )
+api_router = APIRouter(tags=["Current Affairs"])
 
 
 # @router.get("/news")
@@ -57,11 +58,9 @@ router = APIRouter(
 
 
 
-@router.post("/trending")
-def trending_news(data: CountryRequest):
-
+def _get_trending_news(country: str):
     articles = fetch_country_news(
-        data.country
+        country
     )
 
     curated_topics = curate_topics(
@@ -69,3 +68,18 @@ def trending_news(data: CountryRequest):
     )
 
     return curated_topics
+
+
+@router.get("/trending")
+def trending_news(country: str):
+    return _get_trending_news(country)
+
+
+@router.post("/trending")
+def trending_news_for_country(data: CountryRequest):
+    return _get_trending_news(data.country)
+
+
+@api_router.post("/api/current-events")
+def current_events(country: str):
+    return _get_trending_news(country)
