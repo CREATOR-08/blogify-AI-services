@@ -1,24 +1,23 @@
+
 from app.schemas.tagschema import BlogRequest
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 import os
 import json
 
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-model = genai.GenerativeModel(os.getenv("GEMINI_MODEL"))  
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+MODEL_NAME = os.getenv("GEMINI_MODEL")
+
 
 async def generate_tags(data: BlogRequest):
-
     prompt = f"""
     Generate 5 relevant blog tags based on title and content.
 
-    Return ONLY valid JSON.
-
-    Example:
+    Return ONLY valid JSON in this format:
     {{
-      "tags": ["AI","LIFESTYLE","TECHNOLOGY","FUTURE","INNOVATION"]
+      "tags": ["AI", "LIFESTYLE", "TECHNOLOGY", "FUTURE", "INNOVATION"]
     }}
 
     Title:
@@ -28,17 +27,13 @@ async def generate_tags(data: BlogRequest):
     {data.content}
     """
 
-    response = model.generate_content(prompt)
-
-    response_text = response.text.strip()
-
-    response_text = (
-        response_text
-        .replace("```json", "")
-        .replace("```", "")
-        .strip()
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
+        config={
+            "response_mime_type": "application/json"
+        }
     )
 
-    result = json.loads(response_text)
-
+    result = json.loads(response.text)
     return result
